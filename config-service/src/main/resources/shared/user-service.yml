@@ -3,15 +3,20 @@ server.port: 1111
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:9001/eureka
+      defaultZone: http://eureka-server:9001/eureka
   instance:
     preferIpAddress: true
 
 spring:
   datasource:
-    url:   jdbc:mysql://localhost:3306/usersmicrodb?createDatabaseIfNotExist=true&verifyServerCertificate=false&useSSL=true&requireSSL=true
+    # For local database
+#    url:   jdbc:mysql://localhost:3306/usersmicrodb?createDatabaseIfNotExist=true&verifyServerCertificate=false&useSSL=true&requireSSL=true
+#    username: root
+#    password: AA01002aa!
+    # For docker
+    url: jdbc:mysql://docker-mysql:3306/usersmicrodb?createDatabaseIfNotExist=true&verifyServerCertificate=false&useSSL=false&requireSSL=false
     username: root
-    password: AA01002aa!
+    password: root
     initialization-mode: always
     data: classpath:/db/users.sql
 

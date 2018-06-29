@@ -13,4 +13,3 @@ spring:
 
   application:
     name: config-service
-

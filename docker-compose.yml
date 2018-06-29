@@ -1,0 +1,88 @@
+version: "2.0"
+#volumes:
+#  data-db:
+
+services:
+
+  docker-mysql:
+    image: mysql:5.7.12
+    environment:
+     - MYSQL_ROOT_PASSWORD=root
+     - MYSQL_DATABASE=usersmicrodb
+     - MYSQL_USER=root
+#    volumes:
+#      - data-db:/var/lib/mysql
+#      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  config:
+    build:
+      context: .
+      dockerfile: ./config-service/Dockerfile
+    image: config-service
+    restart: always
+##    logging:
+##      options:
+##        max-size:
+##          - 10m
+##        max-file:
+##          - 10
+    ports:
+      - 9002:9002
+
+  eureka-server:
+    build:
+        context: .
+        dockerfile: ./eureka-service/Dockerfile
+    image: eureka-service
+#    restart: always
+#    logging:
+#       options:
+#         max-size:
+#          "10m"
+#         max-file:
+#          "10"
+    depends_on:
+      - config
+
+
+    ports:
+        - 9001:9001
+
+#  gateway:
+#    build:
+#        context: .
+#        dockerfile: ./gateway/Dockerfile
+#    image: gateway
+#    restart: always
+#    ports:
+#      - 4000:4000
+#    depends_on:
+#      - config
+#      - eureka-server
+#
+#  user-service:
+#    build:
+#        context: .
+#        dockerfile: ./user-service/Dockerfile
+#    image: user-service
+#    restart: always
+#    depends_on:
+#      - config
+#      - eureka-server
+#      - docker-mysql
+#    environment:
+#      - DATABASE_HOST=docker-mysql
+#      - DATABASE_USER=root
+#      - DATABASE_PASSWORD=root
+#      - DATABASE_NAME=usersmicrodb
+#      - DATABASE_PORT=3306
+##
+#  userdashboard-service:
+#    build:
+#        context: .
+#        dockerfile: ./users-dashboard-service/Dockerfile
+#    image: userdashboard-service
+#    restart: always
+#    depends_on:
+#      - eureka-server
+#      - user-service

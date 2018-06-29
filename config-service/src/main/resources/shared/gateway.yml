@@ -1,6 +1,13 @@
 server:
   port: 4000
 
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://eureka-server:9001/eureka
+  instance:
+    preferIpAddress: true
+
 hystrix:
   command:
     default:
@@ -23,12 +30,8 @@ zuul:
   routes:
     user-service:
         path: /server/**
-        url: http://localhost:1111
+        url: http://user-service:1111
 
     usersdashboard-service:
         path: /client/**
-        url: http://localhost:2222
-
-
-
-
+        url: http://userdashboard-service:2222
