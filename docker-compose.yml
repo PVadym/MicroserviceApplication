@@ -1,4 +1,4 @@
-version: "2.0"
+version: "2"
 #volumes:
 #  data-db:
 
@@ -34,7 +34,7 @@ services:
         context: .
         dockerfile: ./eureka-service/Dockerfile
     image: eureka-service
-#    restart: always
+    restart: always
 #    logging:
 #       options:
 #         max-size:
@@ -43,46 +43,44 @@ services:
 #          "10"
     depends_on:
       - config
-
-
     ports:
         - 9001:9001
 
-#  gateway:
-#    build:
-#        context: .
-#        dockerfile: ./gateway/Dockerfile
-#    image: gateway
-#    restart: always
-#    ports:
-#      - 4000:4000
-#    depends_on:
-#      - config
-#      - eureka-server
+  gateway:
+    build:
+        context: .
+        dockerfile: ./gateway/Dockerfile
+    image: gateway
+    restart: always
+    ports:
+      - 4000:4000
+    depends_on:
+      - config
+      - eureka-server
+
+  user-service:
+    build:
+        context: .
+        dockerfile: ./user-service/Dockerfile
+    image: user-service
+    restart: always
+    depends_on:
+      - config
+      - eureka-server
+      - docker-mysql
+    environment:
+      - DATABASE_HOST=docker-mysql
+      - DATABASE_USER=root
+      - DATABASE_PASSWORD=root
+      - DATABASE_NAME=usersmicrodb
+      - DATABASE_PORT=3306
 #
-#  user-service:
-#    build:
-#        context: .
-#        dockerfile: ./user-service/Dockerfile
-#    image: user-service
-#    restart: always
-#    depends_on:
-#      - config
-#      - eureka-server
-#      - docker-mysql
-#    environment:
-#      - DATABASE_HOST=docker-mysql
-#      - DATABASE_USER=root
-#      - DATABASE_PASSWORD=root
-#      - DATABASE_NAME=usersmicrodb
-#      - DATABASE_PORT=3306
-##
-#  userdashboard-service:
-#    build:
-#        context: .
-#        dockerfile: ./users-dashboard-service/Dockerfile
-#    image: userdashboard-service
-#    restart: always
-#    depends_on:
-#      - eureka-server
-#      - user-service
+  userdashboard-service:
+    build:
+        context: .
+        dockerfile: ./users-dashboard-service/Dockerfile
+    image: userdashboard-service
+    restart: always
+    depends_on:
+      - eureka-server
+      - user-service
