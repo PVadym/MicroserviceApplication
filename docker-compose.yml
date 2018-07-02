@@ -43,6 +43,12 @@ services:
 #          "10"
     depends_on:
       - config
+    entrypoint: /bin/sh
+    command: >
+            -c "
+            sleep 20; echo 'Waiting for config-server services to start-up...' done;
+            java -jar /app/eureka-service.jar;
+            "
     ports:
         - 9001:9001
 
@@ -57,6 +63,12 @@ services:
     depends_on:
       - config
       - eureka-server
+    entrypoint: /bin/sh
+    command: >
+            -c "
+            sleep 40; echo 'Waiting for eureka-server services to start-up...' done;
+            java -jar /app/gateway.jar;
+            "
 
   user-service:
     build:
@@ -74,6 +86,12 @@ services:
       - DATABASE_PASSWORD=root
       - DATABASE_NAME=usersmicrodb
       - DATABASE_PORT=3306
+    entrypoint: /bin/sh
+    command: >
+            -c "
+            sleep 50; echo 'Waiting for eureka-server services to start-up...' done;
+            java -jar /app/user-service.jar;
+            "
 #
   userdashboard-service:
     build:
@@ -84,3 +102,9 @@ services:
     depends_on:
       - eureka-server
       - user-service
+    entrypoint: /bin/sh
+    command: >
+            -c "
+            sleep 70; echo 'Waiting for eureka-server services to start-up...' done;
+            java -jar /app/usersdashboard.jar;
+            "
