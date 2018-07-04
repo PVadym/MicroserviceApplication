@@ -35,3 +35,7 @@ zuul:
     usersdashboard-service:
         path: /client/**
         url: http://userdashboard-service:2222
+
+    currency-service:
+        path: /currency/**
+        url: http://currency-service:3333

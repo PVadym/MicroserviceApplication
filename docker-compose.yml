@@ -121,3 +121,20 @@ services:
             java -jar /app/usersdashboard.jar;
             done;
             "
+  currency-service:
+    build:
+        context: .
+        dockerfile: ./currency-service/Dockerfile
+    image: currency-service
+    restart: always
+    depends_on:
+      - config
+      - eureka-server
+    entrypoint: /bin/sh
+    command: >
+            -c "
+            while ! $$(sudo docker inspect -f {{.State.Running}} eureka-server);
+             do sleep 20; echo 'Waiting for eureka-server services to start-up...'
+            java -jar /app/currency-service.jar;
+            done;
+            "

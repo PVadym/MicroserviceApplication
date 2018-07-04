@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: currency-service
+
+  cloud:
+    config:
+      uri: http://config:9000
+
+
+
+

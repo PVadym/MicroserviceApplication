@@ -1,0 +1,13 @@
+server:
+  port: 3333
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://eureka-server:9001/eureka
+    instance:
+      preferIpAddress: true
+
+rates:
+  url: http://data.fixer.io/api
+  apiKey: 51b7592f14ec5da4477c1b1156b187cf
